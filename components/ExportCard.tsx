@@ -55,8 +55,8 @@ export type CardData = {
   logoUpload:       string | null;
   logoShape:        LogoShape;
   showQr:           boolean;
-  qrOutlineColor:   string;       // ← NEW: colour of the frame around the QR code (default white)
-  actionRow:        string;       // ← NEW: editable "View Menu • Place Order • Pay Online • Earn Rewards" text
+  cardOutlineColor: string;       // ← NEW: colour of the thin border around the WHOLE card. Empty string = auto (tracks accent colour, old default look)
+  actionRow:        string;       // editable "View Menu • Place Order • Pay Online • Earn Rewards" text
 };
 
 type ExportCardProps = {
@@ -249,7 +249,7 @@ function SpecialtyCafeCard({ data }: { data: CardData }) {
   const textTable   = data.textColorTable   || "#3D2B1F";
   const fontClass   = getFontClass(data.fontFamily);
   const scanLabel   = data.scanLabel?.trim() || "Scan to Order";
-  const qrOutline   = data.qrOutlineColor?.trim() || "#FFFFFF";
+  const cardOutline = data.cardOutlineColor?.trim() || `${accent}22`;
 
   const isWide     = data.logoUpload && data.logoShape === "wide";
   const logoTop    = 36;
@@ -278,7 +278,7 @@ function SpecialtyCafeCard({ data }: { data: CardData }) {
   const qrTop  = qrGapTop + Math.floor((qrAvailable - qrBoxSize) / 2);
 
   return (
-    <CardBase data={data} border={`1px solid ${accent}22`}>
+    <CardBase data={data} border={`1px solid ${cardOutline}`}>
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_18%_0%,rgba(201,169,110,0.09)_0%,transparent_56%),radial-gradient(ellipse_at_80%_100%,rgba(201,169,110,0.06)_0%,transparent_58%)]" />
 
       {/* Top rule */}
@@ -322,14 +322,13 @@ function SpecialtyCafeCard({ data }: { data: CardData }) {
       {/* QR code — hidden when showQr is false */}
       {data.showQr !== false && (
         <div
-          className="absolute left-1/2 -translate-x-1/2 rounded-[20px] shadow-[0_8px_28px_rgba(61,43,31,0.12)]"
+          className="absolute left-1/2 -translate-x-1/2 bg-white rounded-[20px] shadow-[0_8px_28px_rgba(61,43,31,0.12)]"
           style={{
-            top:        qrTop,
-            width:      qrBoxSize,
-            height:     qrBoxSize,
-            padding:    11,
-            overflow:   "hidden",   // clips anything that tries to escape
-            background: qrOutline,
+            top:      qrTop,
+            width:    qrBoxSize,
+            height:   qrBoxSize,
+            padding:  11,
+            overflow: "hidden",   // clips anything that tries to escape
           }}
         >
           {/* 

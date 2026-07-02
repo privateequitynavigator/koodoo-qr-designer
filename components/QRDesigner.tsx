@@ -48,8 +48,8 @@ const accentPresets = [
   "#F97316", "#14B8A6",
 ];
 
-// QR outline / frame colour presets — defaults to white, matches common card backgrounds
-const qrOutlinePresets = ["#FFFFFF", "#F5EDE3", "#FAF8F5", "#1C1C1E", "#3D2B1F", "#C9A96E"];
+// Card outline (the thin border around the whole card) colour presets
+const cardOutlinePresets = ["#C9A96E", "#3D2B1F", "#1C1C1E", "#FFFFFF", "#EF4444", "#10B981"];
 
 // ─── Font options ────────────────────────────────────────────────────────────
 const fontOptions: { id: FontFamily; label: string; sample: string }[] = [
@@ -89,7 +89,7 @@ const DEFAULT_CARD: CardData = {
   logoShape:        "circle",
   scanLabel:        "SCAN TO ORDER",
   showQr:           true,
-  qrOutlineColor:   "#FFFFFF",
+  cardOutlineColor: "",   // empty = auto, tracks accent colour
   actionRow:        "View Menu • Place Order • Pay Online • Earn Rewards",
 };
 
@@ -583,37 +583,6 @@ export default function QRDesigner() {
                 <p className="text-[11px] text-slate-600 leading-relaxed">
                   Export from QR Tiger, Canva, or any QR generator.
                 </p>
-
-                {/* Outline colour */}
-                <div>
-                  <label className="block text-xs text-slate-400 mb-2">QR Outline Colour</label>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {qrOutlinePresets.map((c) => (
-                      <ColorSwatch
-                        key={c}
-                        color={c}
-                        active={cardData.qrOutlineColor === c}
-                        onClick={() => update("qrOutlineColor", c)}
-                      />
-                    ))}
-                    <label
-                      className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
-                      title="Custom outline colour"
-                    >
-                      <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
-                      <input
-                        type="color"
-                        value={cardData.qrOutlineColor}
-                        onChange={(e) => update("qrOutlineColor", e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                      />
-                    </label>
-                    <span className="text-[10px] font-mono text-slate-500">{cardData.qrOutlineColor}</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600 mt-1.5">
-                    The frame around the QR code — white by default.
-                  </p>
-                </div>
               </>
             )}
           </div>
@@ -683,6 +652,50 @@ export default function QRDesigner() {
                 </label>
                 <span className="text-[10px] font-mono text-slate-500">{cardData.accentColor}</span>
               </div>
+            </div>
+
+            {/* Card outline colour — the thin border that wraps the whole card */}
+            <div>
+              <label className="block text-xs text-slate-400 mb-2">Card Outline Colour</label>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => update("cardOutlineColor", "")}
+                  className={`px-2.5 h-7 rounded-lg border text-[11px] font-medium transition ${
+                    !cardData.cardOutlineColor
+                      ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                      : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20"
+                  }`}
+                >
+                  Auto
+                </button>
+                {cardOutlinePresets.map((c) => (
+                  <ColorSwatch
+                    key={c}
+                    color={c}
+                    active={cardData.cardOutlineColor === c}
+                    onClick={() => update("cardOutlineColor", c)}
+                  />
+                ))}
+                <label
+                  className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
+                  title="Custom outline colour"
+                >
+                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
+                  <input
+                    type="color"
+                    value={cardData.cardOutlineColor || cardData.accentColor}
+                    onChange={(e) => update("cardOutlineColor", e.target.value)}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  />
+                </label>
+                <span className="text-[10px] font-mono text-slate-500">
+                  {cardData.cardOutlineColor || "Auto"}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 mt-1.5">
+                The thin line around the whole card. "Auto" follows the accent colour.
+              </p>
             </div>
 
             {/* Primary text colour */}
