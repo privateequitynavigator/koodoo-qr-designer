@@ -11,6 +11,7 @@ import ExportCard, {
   EXPORT_WIDTH,
   type CardData,
 } from "@/components/ExportCard";
+import { rasteriseQrImage } from "@/lib/qrImage";
 
 const EXPORT_PIXEL_RATIO = 3;
 
@@ -40,9 +41,19 @@ const QR_FILENAME_RE = /^qr_([a-zA-Z0-9]+)\.(png|jpe?g|svg|webp)$/i;
 // unique per table — the floor is only needed to correctly locate it.
 const KOODOO_FILENAME_RE = /^.*-([A-Za-z0-9]+)-([A-Za-z0-9]+)-(\d{6,})\.(png|jpe?g|svg|webp)$/i;
 
+// Some merchants want just the number ("07") instead of the letter-prefixed
+// code ("G7"). Pulls the digits out and zero-pads to 2 — falls back to the
+// original code if it has no digits at all (e.g. a purely alpha code like "VIP").
+function toDigitsOnly(tableCode: string): string {
+  const digits = tableCode.match(/\d+/)?.[0];
+  if (!digits) return tableCode;
+  return digits.padStart(2, "0");
+}
+
 function parseQrFiles(
   files: FileList,
-  mode: NamingMode
+  mode: NamingMode,
+  digitsOnly: boolean
 ): { matched: QrEntry[]; skipped: string[] } {
   const matched: Omit<QrEntry, "rasterised" | "status">[] = [];
   const skipped: string[] = [];
@@ -56,7 +67,8 @@ function parseQrFiles(
       if (m) {
         // m[1] = floor code (GF, 1F…) — used only to anchor the parse
         // m[2] = table code (G7, T7…) — this is what we keep
-        matched.push({ tableNumber: m[2].toUpperCase(), file });
+        const tableCode = m[2].toUpperCase();
+        matched.push({ tableNumber: digitsOnly ? toDigitsOnly(tableCode) : tableCode, file });
       } else {
         skipped.push(name);
       }
@@ -84,34 +96,6 @@ function parseQrFiles(
   };
 }
 
-// ─── Rasterise one file to a 512×512 PNG data URL ────────────────────────────
-function rasteriseFile(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = (ev) => {
-      const dataUrl = ev.target?.result as string;
-      const img = new Image();
-      img.onerror = () => resolve(dataUrl); // fallback: use as-is
-      img.onload = () => {
-        try {
-          const canvas = document.createElement("canvas");
-          canvas.width  = 512;
-          canvas.height = 512;
-          const ctx = canvas.getContext("2d");
-          if (!ctx) { resolve(dataUrl); return; }
-          ctx.drawImage(img, 0, 0, 512, 512);
-          resolve(canvas.toDataURL("image/png"));
-        } catch {
-          resolve(dataUrl);
-        }
-      };
-      img.src = dataUrl;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
 // ─── Wait for two animation frames (lets React repaint the hidden card) ───────
 function waitFrames(): Promise<void> {
   return new Promise((resolve) =>
@@ -127,6 +111,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
   const exportRef      = useRef<HTMLDivElement>(null);
 
   const [namingMode,  setNamingMode]  = useState<NamingMode>("standard");
+  const [digitsOnly,  setDigitsOnly]  = useState(false);
   const [entries,     setEntries]     = useState<QrEntry[]>([]);
   const [skipped,     setSkipped]     = useState<string[]>([]);
   const [isRunning,   setIsRunning]   = useState(false);
@@ -152,12 +137,18 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
     handleReset(); // parsing mode changed — clear stale results, ask them to reselect
   }
 
+  function toggleDigitsOnly() {
+    if (isRunning) return;
+    setDigitsOnly((v) => !v);
+    handleReset(); // output format changed — clear stale results, ask them to reselect
+  }
+
   // ── Folder selected ─────────────────────────────────────────────────────────
   async function handleFolderSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const { matched, skipped: sk } = parseQrFiles(files, namingMode);
+    const { matched, skipped: sk } = parseQrFiles(files, namingMode, digitsOnly);
     setSkipped(sk);
     setEntries([]);
     setProgress(0);
@@ -173,7 +164,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
     const rasterised = await Promise.all(
       matched.map(async (entry) => ({
         ...entry,
-        rasterised: await rasteriseFile(entry.file),
+        rasterised: await rasteriseQrImage(entry.file),
       }))
     );
     setEntries(rasterised);
@@ -305,6 +296,33 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
             />
           </button>
         </div>
+
+        {/* ── Table number format — only relevant in KooDoo mode ── */}
+        {isKoodoo && (
+          <div className="flex items-center justify-between rounded-xl border border-white/8 bg-white/[0.02] px-4 py-3">
+            <div className="pr-3">
+              <p className="text-sm text-slate-300">Table number only</p>
+              <p className="text-[11px] text-slate-600 mt-0.5">
+                Drop the letter — <span className="font-mono text-emerald-400">G7</span> becomes{" "}
+                <span className="font-mono text-emerald-400">07</span>. Leave off to keep the full code.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={toggleDigitsOnly}
+              disabled={isRunning}
+              className={`relative w-10 h-5 rounded-full transition-colors flex-shrink-0 ${
+                digitsOnly ? "bg-emerald-500" : "bg-white/10"
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                  digitsOnly ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+        )}
 
         {/* ── Instructions ── */}
         <div className="rounded-xl bg-white/[0.03] border border-white/8 px-4 py-3 space-y-1.5">

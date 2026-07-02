@@ -28,6 +28,7 @@ import PreviewModal from "@/components/PreviewModal";
 import TemplateGrid from "@/components/TemplateGrid";
 import BatchExport from "@/components/BatchExport";
 import { templates, type TemplateId } from "@/data/templates";
+import { rasteriseQrImage } from "@/lib/qrImage";
 
 const EXPORT_PIXEL_RATIO = 3;
 
@@ -239,30 +240,7 @@ export default function QRDesigner() {
   function handleQrUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const dataUrl = ev.target?.result as string;
-
-      // Rasterise to 512×512 PNG regardless of source format
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width  = 512;
-        canvas.height = 512;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) { update("qrImage", dataUrl); return; }
-        ctx.drawImage(img, 0, 0, 512, 512);
-        const pngUrl = canvas.toDataURL("image/png");
-        update("qrImage", pngUrl);
-      };
-      img.onerror = () => {
-        // Fallback: store as-is if rasterisation fails
-        update("qrImage", dataUrl);
-      };
-      img.src = dataUrl;
-    };
-    reader.readAsDataURL(file);
+    rasteriseQrImage(file).then((pngUrl) => update("qrImage", pngUrl));
   }
 
   function clearQr() {
