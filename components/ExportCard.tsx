@@ -124,7 +124,7 @@ function Footer({ data }: { data: CardData }) {
   return (
     <>
       <div className="absolute left-[52px] right-[52px] h-px" style={{ top: 636, backgroundColor: `${accent}33` }} />
-      <div className="absolute bottom-[11px] left-0 right-0 flex justify-center">
+      <div className="absolute bottom-[18px] left-0 right-0 flex justify-center">
         <div className="flex items-center gap-[7px]">
           <span className="text-[8px] font-medium tracking-[0.03em]" style={{ color: `${color}88` }}>
             Powered by
