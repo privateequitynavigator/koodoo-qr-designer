@@ -123,8 +123,8 @@ function ColorSwatch({
       className="relative aspect-square rounded-lg border-2 transition hover:scale-105 focus:outline-none"
       style={{
         backgroundColor: color,
-        borderColor: active ? "#ffffff" : isWhite ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.12)",
-        boxShadow: active ? `0 0 0 2px #06080e, 0 0 0 4px ${color}` : "none",
+        borderColor: active ? "#0f172a" : isWhite ? "rgba(0,0,0,0.18)" : "rgba(0,0,0,0.10)",
+        boxShadow: active ? `0 0 0 2px #ffffff, 0 0 0 4px ${color}` : "none",
         minWidth: 28,
         minHeight: 28,
       }}
@@ -164,11 +164,11 @@ function ColorPickerRow({
         ))}
         {/* Free-pick */}
         <label
-          className="relative aspect-square rounded-lg border-2 border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition"
+          className="relative aspect-square rounded-lg border-2 border-slate-200 overflow-hidden cursor-pointer hover:border-slate-300 transition"
           style={{ minWidth: 28, minHeight: 28 }}
           title="Custom colour"
         >
-          <span className="absolute inset-0 flex items-center justify-center text-[10px] text-slate-400">+</span>
+          <span className="absolute inset-0 flex items-center justify-center text-[10px] text-slate-500">+</span>
           <input
             type="color"
             value={value}
@@ -185,7 +185,7 @@ function ColorPickerRow({
 
 // ─── Divider ──────────────────────────────────────────────────────────────────
 function Divider() {
-  return <div className="border-t border-white/8 my-1" />;
+  return <div className="border-t border-slate-200 my-1" />;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -290,17 +290,17 @@ export default function QRDesigner() {
   // RENDER
   // ═══════════════════════════════════════════════════════════════════════════
   return (
-    <main className="min-h-screen bg-[#06080e] text-white px-6 py-8">
+    <main className="min-h-screen bg-white text-slate-900 px-6 py-8">
 
       {/* ── Header ── */}
       <header className="flex items-center justify-between max-w-6xl mx-auto mb-6">
         <div className="flex items-center gap-4">
-          <img src="/koodoo-logo.png" alt="KooDoo" className="h-9 w-auto object-contain" />
+          <img src="/koodoo-logo.png" alt="KooDoo" className="h-6 w-auto object-contain" />
           <p className="text-xs uppercase tracking-widest text-slate-500">Table Stand Designer</p>
         </div>
 
         {/* Tab switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/[0.03] p-1">
+        <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
           {(["single", "batch"] as const).map((tab) => (
             <button
               key={tab}
@@ -309,7 +309,7 @@ export default function QRDesigner() {
               className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
                 activeTab === tab
                   ? "bg-emerald-500 text-white"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-500 hover:text-slate-900"
               }`}
             >
               {tab === "single" ? "Single" : "Batch Export"}
@@ -323,62 +323,62 @@ export default function QRDesigner() {
         <section className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6 items-start">
 
           {/* LEFT PANEL — Customize */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 space-y-6">
-          <h3 className="text-white font-semibold text-lg">Customise</h3>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 space-y-6">
+          <h3 className="text-slate-900 font-semibold text-lg">Customise</h3>
 
           {/* ── Merchant Info ── */}
           <div className="space-y-4">
             <SectionLabel>Merchant Info</SectionLabel>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1.5">Merchant Name</label>
+              <label className="block text-sm text-slate-700 mb-1.5">Merchant Name</label>
               <input
                 type="text"
                 value={cardData.merchantName}
                 onChange={(e) => update("merchantName", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-emerald-500 text-sm"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-emerald-500 text-sm"
                 placeholder="THE GARDEN KITCHEN"
               />
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1.5">Tagline</label>
+              <label className="block text-sm text-slate-700 mb-1.5">Tagline</label>
               <input
                 type="text"
                 value={cardData.tagline}
                 onChange={(e) => update("tagline", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-emerald-500 text-sm"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-emerald-500 text-sm"
                 placeholder="Fresh Daily"
               />
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1.5">Table</label>
+              <label className="block text-sm text-slate-700 mb-1.5">Table</label>
               <div className="grid grid-cols-2 gap-3">
                 <input
                   type="text"
                   value={cardData.tablePrefix}
                   onChange={(e) => update("tablePrefix", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-emerald-500 text-center text-sm"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-emerald-500 text-center text-sm"
                   placeholder="TABLE"
                 />
                 <input
                   type="text"
                   value={cardData.tableNumber}
                   onChange={(e) => update("tableNumber", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-emerald-500 text-center text-sm"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-emerald-500 text-center text-sm"
                   placeholder="01"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1.5">Scan Label</label>
+              <label className="block text-sm text-slate-700 mb-1.5">Scan Label</label>
               <input
                 type="text"
                 value={cardData.scanLabel ?? "Scan to Order"}
                 onChange={(e) => update("scanLabel", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-emerald-500 text-sm"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-emerald-500 text-sm"
                 placeholder="Scan to Order"
               />
               <p className="text-[11px] text-slate-600 mt-1.5">
@@ -387,12 +387,12 @@ export default function QRDesigner() {
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1.5">Action Row</label>
+              <label className="block text-sm text-slate-700 mb-1.5">Action Row</label>
               <input
                 type="text"
                 value={cardData.actionRow ?? "View Menu • Place Order • Pay Online • Earn Rewards"}
                 onChange={(e) => update("actionRow", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-emerald-500 text-sm"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-emerald-500 text-sm"
                 placeholder="View Menu • Place Order • Pay Online • Earn Rewards"
               />
               <p className="text-[11px] text-slate-600 mt-1.5">
@@ -425,9 +425,9 @@ export default function QRDesigner() {
                 </button>
               </div>
             ) : (
-              <label className="flex items-center gap-3 rounded-lg border border-white/8 bg-white/[0.02] px-3 py-2.5 cursor-pointer hover:border-white/15 hover:bg-white/[0.04] transition">
+              <label className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 cursor-pointer hover:border-slate-300 hover:bg-slate-100 transition">
                 <ImageIcon size={15} className="text-slate-600 flex-shrink-0" />
-                <span className="text-sm text-slate-400">Upload logo</span>
+                <span className="text-sm text-slate-500">Upload logo</span>
                 <span className="text-[11px] text-slate-600 ml-auto">PNG · JPG · SVG</span>
                 <input
                   ref={logoInputRef}
@@ -441,7 +441,7 @@ export default function QRDesigner() {
 
             {/* Logo shape */}
             <div>
-              <label className="block text-xs text-slate-400 mb-2">Logo Shape</label>
+              <label className="block text-xs text-slate-500 mb-2">Logo Shape</label>
               <div className="grid grid-cols-4 gap-2">
                 {(
                   [
@@ -458,7 +458,7 @@ export default function QRDesigner() {
                     className={`rounded-xl border px-2 py-2.5 flex flex-col items-center justify-center gap-1 text-[11px] font-medium transition ${
                       cardData.logoShape === id
                         ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                        : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20"
+                        : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
                     }`}
                   >
                     {Icon ? <Icon size={14} /> : <span className="text-[14px] leading-none">—</span>}
@@ -476,7 +476,7 @@ export default function QRDesigner() {
             {/* Fallback icon picker — shown when no upload */}
             {!cardData.logoUpload && cardData.logoShape !== "none" && (
               <div>
-                <label className="block text-xs text-slate-400 mb-2">Fallback Icon</label>
+                <label className="block text-xs text-slate-500 mb-2">Fallback Icon</label>
                 <div className="grid grid-cols-4 gap-2">
                   {logoIcons.map((item) => {
                     const Icon = item.icon;
@@ -488,7 +488,7 @@ export default function QRDesigner() {
                         className={`rounded-xl border p-3 flex items-center justify-center transition ${
                           cardData.logoIcon === item.id
                             ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                            : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20"
+                            : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
                         }`}
                         title={item.label}
                       >
@@ -509,12 +509,12 @@ export default function QRDesigner() {
 
             {/* Show / Hide toggle */}
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-300">Show QR on card</span>
+              <span className="text-sm text-slate-700">Show QR on card</span>
               <button
                 type="button"
                 onClick={() => update("showQr", !cardData.showQr)}
                 className={`relative w-10 h-5 rounded-full transition-colors ${
-                  cardData.showQr ? "bg-emerald-500" : "bg-white/10"
+                  cardData.showQr ? "bg-emerald-500" : "bg-slate-200"
                 }`}
               >
                 <span
@@ -545,9 +545,9 @@ export default function QRDesigner() {
                     </button>
                   </div>
                 ) : (
-                  <label className="flex items-center gap-3 rounded-lg border border-white/8 bg-white/[0.02] px-3 py-2.5 cursor-pointer hover:border-white/15 hover:bg-white/[0.04] transition">
+                  <label className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 cursor-pointer hover:border-slate-300 hover:bg-slate-100 transition">
                     <ImageIcon size={15} className="text-slate-600 flex-shrink-0" />
-                    <span className="text-sm text-slate-400">Upload QR code</span>
+                    <span className="text-sm text-slate-500">Upload QR code</span>
                     <span className="text-[11px] text-slate-600 ml-auto">PNG · SVG</span>
                     <input
                       ref={qrInputRef}
@@ -573,7 +573,7 @@ export default function QRDesigner() {
 
             {/* Background */}
             <div>
-              <label className="block text-xs text-slate-400 mb-2">Card Background</label>
+              <label className="block text-xs text-slate-500 mb-2">Card Background</label>
               <div className="grid grid-cols-7 gap-1.5 mb-1">
                 {bgPresets.map((p) => (
                   <ColorSwatch
@@ -587,10 +587,10 @@ export default function QRDesigner() {
               </div>
               <div className="flex items-center gap-2 mt-1.5">
                 <label
-                  className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
+                  className="relative h-7 w-7 rounded-lg border border-slate-200 overflow-hidden cursor-pointer hover:border-slate-300 transition flex-shrink-0"
                   title="Custom background colour"
                 >
-                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
+                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-500">+</span>
                   <input
                     type="color"
                     value={cardData.bgColor}
@@ -604,7 +604,7 @@ export default function QRDesigner() {
 
             {/* Accent colour */}
             <div>
-              <label className="block text-xs text-slate-400 mb-2">Accent Colour</label>
+              <label className="block text-xs text-slate-500 mb-2">Accent Colour</label>
               <div className="grid grid-cols-[repeat(10,1fr)] gap-1.5 mb-1">
                 {accentPresets.map((c) => (
                   <ColorSwatch
@@ -617,10 +617,10 @@ export default function QRDesigner() {
               </div>
               <div className="flex items-center gap-2 mt-1.5">
                 <label
-                  className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
+                  className="relative h-7 w-7 rounded-lg border border-slate-200 overflow-hidden cursor-pointer hover:border-slate-300 transition flex-shrink-0"
                   title="Custom accent colour"
                 >
-                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
+                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-500">+</span>
                   <input
                     type="color"
                     value={cardData.accentColor}
@@ -634,7 +634,7 @@ export default function QRDesigner() {
 
             {/* Card outline colour — the thin border that wraps the whole card */}
             <div>
-              <label className="block text-xs text-slate-400 mb-2">Card Outline Colour</label>
+              <label className="block text-xs text-slate-500 mb-2">Card Outline Colour</label>
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   type="button"
@@ -642,7 +642,7 @@ export default function QRDesigner() {
                   className={`px-2.5 h-7 rounded-lg border text-[11px] font-medium transition ${
                     !cardData.cardOutlineColor
                       ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                      : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20"
+                      : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
                   }`}
                 >
                   Auto
@@ -656,10 +656,10 @@ export default function QRDesigner() {
                   />
                 ))}
                 <label
-                  className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
+                  className="relative h-7 w-7 rounded-lg border border-slate-200 overflow-hidden cursor-pointer hover:border-slate-300 transition flex-shrink-0"
                   title="Custom outline colour"
                 >
-                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
+                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-500">+</span>
                   <input
                     type="color"
                     value={cardData.cardOutlineColor || cardData.accentColor}
@@ -678,7 +678,7 @@ export default function QRDesigner() {
 
             {/* Primary text colour */}
             <div>
-              <label className="block text-xs text-slate-400 mb-1">
+              <label className="block text-xs text-slate-500 mb-1">
                 Text Colour — Name, Tagline, Scan to Order, Footer
               </label>
               <div className="flex items-center gap-2">
@@ -691,10 +691,10 @@ export default function QRDesigner() {
                   />
                 ))}
                 <label
-                  className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
+                  className="relative h-7 w-7 rounded-lg border border-slate-200 overflow-hidden cursor-pointer hover:border-slate-300 transition flex-shrink-0"
                   title="Custom text colour"
                 >
-                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
+                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-500">+</span>
                   <input
                     type="color"
                     value={cardData.textColorPrimary}
@@ -708,7 +708,7 @@ export default function QRDesigner() {
 
             {/* Table text colour */}
             <div>
-              <label className="block text-xs text-slate-400 mb-1">
+              <label className="block text-xs text-slate-500 mb-1">
                 Text Colour — TABLE word &amp; Number
               </label>
               <div className="flex items-center gap-2">
@@ -721,10 +721,10 @@ export default function QRDesigner() {
                   />
                 ))}
                 <label
-                  className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
+                  className="relative h-7 w-7 rounded-lg border border-slate-200 overflow-hidden cursor-pointer hover:border-slate-300 transition flex-shrink-0"
                   title="Custom table colour"
                 >
-                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
+                  <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-500">+</span>
                   <input
                     type="color"
                     value={cardData.textColorTable}
@@ -754,7 +754,7 @@ export default function QRDesigner() {
                     className={`rounded-xl border px-3 py-2.5 flex items-center gap-2.5 text-left transition ${
                       active
                         ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                        : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20"
+                        : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
                     }`}
                   >
                     <span className={`${cls} text-[18px] leading-none font-semibold w-7 text-center`}>
@@ -816,6 +816,12 @@ export default function QRDesigner() {
           <ExportCard templateId={selectedTemplateId} data={cardData} />
         </div>
       </div>
+
+      {/* ── App footer ── */}
+      <footer className="max-w-6xl mx-auto mt-12 pt-6 border-t border-slate-200 flex items-center justify-center gap-2">
+        <span className="text-xs text-slate-500">Powered by</span>
+        <img src="/koodoo-logo.png" alt="KooDoo" className="h-4 w-auto object-contain opacity-80" />
+      </footer>
     </main>
   );
 }

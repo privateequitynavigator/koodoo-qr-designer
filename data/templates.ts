@@ -11,10 +11,10 @@ export type TemplateMeta = {
 export const templates: TemplateMeta[] = [
   {
     id: "specialty-cafe",
-    name: "Specialty Café",
-    category: "Coffee & Cafés",
+    name: "Standard Template",
+    category: "",
     description:
-      "Warm cream colours with elegant café styling and soft textures.",
+      "Fully editable table stand card — colours, fonts, logo, and text are customisable per merchant.",
     accentColor: "#C9A96E",
   },
 ];

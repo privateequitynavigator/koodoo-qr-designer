@@ -41,13 +41,13 @@ export default function TemplateCard({
       }}
       className={`rounded-2xl border p-4 w-fit cursor-pointer transition-all ${
         isSelected
-          ? "border-emerald-500/80 shadow-[0_0_0_1px_rgba(16,185,129,0.45)] bg-white/[0.04]"
-          : "border-white/10 bg-white/[0.03] hover:border-white/20"
+          ? "border-emerald-500 shadow-[0_0_0_1px_rgba(16,185,129,0.35)] bg-emerald-50/40"
+          : "border-slate-200 bg-white hover:border-slate-300"
       }`}
     >
       {/* Preview container — bg matches the card's own bgColor live */}
       <div
-        className="rounded-xl overflow-hidden"
+        className="rounded-xl overflow-hidden border border-slate-100"
         style={{
           width: EXPORT_WIDTH * PREVIEW_SCALE,
           height: EXPORT_HEIGHT * PREVIEW_SCALE,
@@ -74,9 +74,11 @@ export default function TemplateCard({
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: template.accentColor }}
             />
-            <h2 className="font-semibold text-sm">{template.name}</h2>
+            <h2 className="font-semibold text-sm text-slate-900">{template.name}</h2>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">{template.category}</p>
+          {template.category && (
+            <p className="text-xs text-slate-500 mt-0.5">{template.category}</p>
+          )}
         </div>
 
         <div className="flex gap-2">
@@ -85,7 +87,7 @@ export default function TemplateCard({
               event.stopPropagation();
               onPreview();
             }}
-            className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition"
+            className="h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition"
             title="Preview"
             type="button"
           >

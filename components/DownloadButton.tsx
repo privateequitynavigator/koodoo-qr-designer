@@ -15,7 +15,7 @@ export default function DownloadButton({
     <button
       onClick={onClick}
       disabled={isDownloading}
-      className="h-10 w-10 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"
+      className="h-10 w-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"
       title="Download HD PNG"
       type="button"
     >

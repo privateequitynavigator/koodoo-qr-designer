@@ -31,12 +31,14 @@ export default function PreviewModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-6">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
       <div className="w-fit max-h-[95vh] overflow-auto">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 bg-white rounded-xl px-4 py-3 shadow-lg">
           <div>
-            <h3 className="font-semibold text-white">{template.name}</h3>
-            <p className="text-xs text-slate-400">{template.description}</p>
+            <h3 className="font-semibold text-slate-900">{template.name}</h3>
+            {template.description && (
+              <p className="text-xs text-slate-500">{template.description}</p>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -47,7 +49,7 @@ export default function PreviewModal({
 
             <button
               onClick={onClose}
-              className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition"
+              className="h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition"
               title="Close"
               type="button"
             >

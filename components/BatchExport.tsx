@@ -261,24 +261,24 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
   // ═══════════════════════════════════════════════════════════════════════════
   return (
     <>
-      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 space-y-5 max-w-2xl">
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 space-y-5 max-w-2xl">
 
         {/* ── Header ── */}
         <div>
-          <h3 className="text-white font-semibold text-lg">Batch Export</h3>
+          <h3 className="text-slate-900 font-semibold text-lg">Batch Export</h3>
           <p className="text-slate-500 text-sm mt-1">
             Upload your QR folder and generate all table cards at once.
           </p>
         </div>
 
         {/* ── Naming mode toggle ── */}
-        <div className="flex items-center justify-between rounded-xl border border-white/8 bg-white/[0.02] px-4 py-3">
+        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3">
           <div className="pr-3">
-            <p className="text-sm text-slate-300">Downloaded from KooDoo</p>
+            <p className="text-sm text-slate-800">Downloaded from KooDoo</p>
             <p className="text-[11px] text-slate-600 mt-0.5">
               Turn on if your files look like{" "}
-              <span className="font-mono text-emerald-400">qr-generic-GF-G7-…</span>{" "}
-              instead of <span className="font-mono text-emerald-400">qr_01.png</span>
+              <span className="font-mono text-emerald-600">qr-generic-GF-G7-…</span>{" "}
+              instead of <span className="font-mono text-emerald-600">qr_01.png</span>
             </p>
           </div>
           <button
@@ -286,7 +286,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
             onClick={toggleNamingMode}
             disabled={isRunning}
             className={`relative w-10 h-5 rounded-full transition-colors flex-shrink-0 ${
-              isKoodoo ? "bg-emerald-500" : "bg-white/10"
+              isKoodoo ? "bg-emerald-500" : "bg-slate-200"
             }`}
           >
             <span
@@ -299,12 +299,12 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
 
         {/* ── Table number format — only relevant in KooDoo mode ── */}
         {isKoodoo && (
-          <div className="flex items-center justify-between rounded-xl border border-white/8 bg-white/[0.02] px-4 py-3">
+          <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3">
             <div className="pr-3">
-              <p className="text-sm text-slate-300">Table number only</p>
+              <p className="text-sm text-slate-800">Table number only</p>
               <p className="text-[11px] text-slate-600 mt-0.5">
-                Drop the letter — <span className="font-mono text-emerald-400">G7</span> becomes{" "}
-                <span className="font-mono text-emerald-400">07</span>. Leave off to keep the full code.
+                Drop the letter — <span className="font-mono text-emerald-600">G7</span> becomes{" "}
+                <span className="font-mono text-emerald-600">07</span>. Leave off to keep the full code.
               </p>
             </div>
             <button
@@ -312,7 +312,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
               onClick={toggleDigitsOnly}
               disabled={isRunning}
               className={`relative w-10 h-5 rounded-full transition-colors flex-shrink-0 ${
-                digitsOnly ? "bg-emerald-500" : "bg-white/10"
+                digitsOnly ? "bg-emerald-500" : "bg-slate-200"
               }`}
             >
               <span
@@ -325,38 +325,38 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
         )}
 
         {/* ── Instructions ── */}
-        <div className="rounded-xl bg-white/[0.03] border border-white/8 px-4 py-3 space-y-1.5">
-          <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-widest mb-2">File naming rules</p>
+        <div className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 space-y-1.5">
+          <p className="text-[11px] text-slate-500 font-semibold uppercase tracking-widest mb-2">File naming rules</p>
           {isKoodoo ? (
             <>
-              <p className="text-[12px] text-slate-400">
+              <p className="text-[12px] text-slate-600">
                 • Reads KooDoo-exported filenames like{" "}
-                <span className="font-mono text-emerald-400">qr-generic-GF-G7-1782954571282.png</span>
+                <span className="font-mono text-emerald-600">qr-generic-GF-G7-1782954571282.png</span>
               </p>
-              <p className="text-[12px] text-slate-400">
+              <p className="text-[12px] text-slate-600">
                 • The table code is whatever comes right after the floor code —{" "}
-                <span className="font-mono text-slate-300">G7</span>,{" "}
-                <span className="font-mono text-slate-300">T7</span>, etc.
+                <span className="font-mono text-slate-700">G7</span>,{" "}
+                <span className="font-mono text-slate-700">T7</span>, etc.
               </p>
-              <p className="text-[12px] text-slate-400">• Put all QR files in a single folder — no subfolders</p>
-              <p className="text-[12px] text-slate-400">• Card design, colours, logo and font are taken from your Single tab settings</p>
+              <p className="text-[12px] text-slate-600">• Put all QR files in a single folder — no subfolders</p>
+              <p className="text-[12px] text-slate-600">• Card design, colours, logo and font are taken from your Single tab settings</p>
             </>
           ) : (
             <>
-              <p className="text-[12px] text-slate-400">• Name each QR file as <span className="font-mono text-emerald-400">qr_01.png</span>, <span className="font-mono text-emerald-400">qr_02.png</span> … up to <span className="font-mono text-emerald-400">qr_100.png</span></p>
-              <p className="text-[12px] text-slate-400">• Put all QR files in a single folder — no subfolders</p>
-              <p className="text-[12px] text-slate-400">• Table numbers can be numeric <span className="font-mono text-slate-300">01</span> or alphanumeric <span className="font-mono text-slate-300">A1</span>, <span className="font-mono text-slate-300">VIP</span></p>
-              <p className="text-[12px] text-slate-400">• Card design, colours, logo and font are taken from your Single tab settings</p>
+              <p className="text-[12px] text-slate-600">• Name each QR file as <span className="font-mono text-emerald-600">qr_01.png</span>, <span className="font-mono text-emerald-600">qr_02.png</span> … up to <span className="font-mono text-emerald-600">qr_100.png</span></p>
+              <p className="text-[12px] text-slate-600">• Put all QR files in a single folder — no subfolders</p>
+              <p className="text-[12px] text-slate-600">• Table numbers can be numeric <span className="font-mono text-slate-700">01</span> or alphanumeric <span className="font-mono text-slate-700">A1</span>, <span className="font-mono text-slate-700">VIP</span></p>
+              <p className="text-[12px] text-slate-600">• Card design, colours, logo and font are taken from your Single tab settings</p>
             </>
           )}
         </div>
 
         {/* ── Folder picker ── */}
         <div>
-          <label className="flex items-center gap-3 rounded-xl border border-dashed border-white/15 bg-white/[0.02] px-4 py-4 cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/[0.03] transition">
+          <label className="flex items-center gap-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-50 transition">
             <FolderOpen size={18} className="text-slate-500 flex-shrink-0" />
             <div>
-              <p className="text-sm text-slate-300">
+              <p className="text-sm text-slate-800">
                 {total > 0 ? `${total} QR file${total > 1 ? "s" : ""} detected` : "Select QR folder"}
               </p>
               <p className="text-[11px] text-slate-600 mt-0.5">Click to open folder picker</p>
@@ -398,9 +398,9 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
               )}
             </div>
 
-            <div className="rounded-xl border border-white/8 overflow-hidden">
+            <div className="rounded-xl border border-slate-200 overflow-hidden">
               {/* Matched entries */}
-              <div className="max-h-[280px] overflow-y-auto divide-y divide-white/[0.04]">
+              <div className="max-h-[280px] overflow-y-auto divide-y divide-slate-100">
                 {entries.map((entry) => (
                   <div key={entry.tableNumber} className="flex items-center gap-3 px-3 py-2">
                     {/* Status icon */}
@@ -411,7 +411,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
                       <XCircle size={14} className="text-red-400 flex-shrink-0" />
                     )}
                     {entry.status === "pending" && (
-                      <div className="w-[14px] h-[14px] rounded-full border border-white/20 flex-shrink-0" />
+                      <div className="w-[14px] h-[14px] rounded-full border border-slate-300 flex-shrink-0" />
                     )}
 
                     {/* QR thumb */}
@@ -422,7 +422,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
                     />
 
                     {/* Filename */}
-                    <span className="text-[12px] text-slate-400 flex-1 truncate font-mono">
+                    <span className="text-[12px] text-slate-600 flex-1 truncate font-mono">
                       {entry.file.name}
                     </span>
 
@@ -430,7 +430,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
                     <span className="text-slate-600 text-[11px]">→</span>
 
                     {/* Output label */}
-                    <span className="text-[12px] text-slate-300 font-semibold">
+                    <span className="text-[12px] text-slate-800 font-semibold">
                       Table {entry.tableNumber}
                     </span>
                   </div>
@@ -439,14 +439,14 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
 
               {/* Skipped files */}
               {skipped.length > 0 && (
-                <div className="border-t border-white/8 px-3 py-2">
+                <div className="border-t border-slate-200 px-3 py-2">
                   <p className="text-[11px] text-slate-600 mb-1">
                     {skipped.length} file{skipped.length > 1 ? "s" : ""} skipped (name doesn't match{" "}
                     {isKoodoo ? "the KooDoo pattern" : <span className="font-mono">qr_XX.png</span>})
                   </p>
                   <div className="flex flex-wrap gap-1">
                     {skipped.slice(0, 8).map((name) => (
-                      <span key={name} className="text-[10px] font-mono text-slate-600 bg-white/5 px-1.5 py-0.5 rounded">
+                      <span key={name} className="text-[10px] font-mono text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
                         {name}
                       </span>
                     ))}
@@ -464,12 +464,12 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
         {isRunning && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-slate-300">
+              <span className="text-slate-800">
                 Generating {doneCount + errorCount} of {total}…
               </span>
-              <span className="text-slate-400 font-mono">{progress}%</span>
+              <span className="text-slate-600 font-mono">{progress}%</span>
             </div>
-            <div className="w-full h-2 rounded-full bg-white/8 overflow-hidden">
+            <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
               <div
                 className="h-full rounded-full bg-emerald-500 transition-all duration-200"
                 style={{ width: `${progress}%` }}
@@ -492,7 +492,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
               : <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
             }
             <div>
-              <p className="text-sm font-semibold text-white">
+              <p className="text-sm font-semibold text-slate-900">
                 {hasError
                   ? `${doneCount} exported, ${errorCount} failed`
                   : `All ${doneCount} cards exported successfully`
@@ -513,7 +513,7 @@ export default function BatchExport({ baseCardData }: { baseCardData: CardData }
             disabled={isRunning}
             className={`w-full rounded-xl py-3 text-sm font-bold tracking-wide transition ${
               isRunning
-                ? "bg-white/5 text-slate-500 cursor-not-allowed"
+                ? "bg-slate-100 text-slate-400 cursor-not-allowed"
                 : "bg-emerald-500 hover:bg-emerald-400 text-white"
             }`}
           >
