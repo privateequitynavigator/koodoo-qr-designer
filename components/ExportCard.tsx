@@ -44,7 +44,7 @@ export type CardData = {
   tablePrefix:      string;
   tableNumber:      string;
   qrImage:          string;
-  scanLabel:        string;       // ← NEW: customisable "Scan to Order" text
+  scanLabel:        string;       // customisable "Scan to Order" text
   logoStyle:        LogoStyle;
   logoIcon:         LogoIconId;
   accentColor:      string;
@@ -55,6 +55,8 @@ export type CardData = {
   logoUpload:       string | null;
   logoShape:        LogoShape;
   showQr:           boolean;
+  qrOutlineColor:   string;       // ← NEW: colour of the frame around the QR code (default white)
+  actionRow:        string;       // ← NEW: editable "View Menu • Place Order • Pay Online • Earn Rewards" text
 };
 
 type ExportCardProps = {
@@ -135,34 +137,45 @@ function Footer({ data }: { data: CardData }) {
 }
 
 // ─── Action row ──────────────────────────────────────────────────────────────
+// Text is now fully editable via data.actionRow. Items are separated by "•" —
+// e.g. "View Menu • Place Order • Pay Online • Earn Rewards" — and rendered
+// with the same bullet-separator styling as before, however many items there are.
 function ActionRow({ data, top }: { data: CardData; top: number }) {
   const accent = data.accentColor || "#C9A96E";
+  const raw = data.actionRow?.trim() || "View Menu • Place Order • Pay Online • Earn Rewards";
+  const items = raw.split("•").map((s) => s.trim()).filter(Boolean);
+
+  if (items.length === 0) return null;
+
   return (
     <div
-      className="absolute left-0 right-0 flex justify-center items-center text-[8px] tracking-[0.13em] font-semibold"
+      className="absolute left-0 right-0 flex justify-center items-center flex-wrap px-[16px] text-[8px] tracking-[0.13em] font-semibold"
       style={{ top, color: accent }}
     >
-      <span>View Menu</span>
-      <span className="mx-[6px] opacity-50">•</span>
-      <span>Place Order</span>
-      <span className="mx-[6px] opacity-50">•</span>
-      <span>Pay Online</span>
-      <span className="mx-[6px] opacity-50">•</span>
-      <span>Earn Rewards</span>
+      {items.map((item, i) => (
+        <span key={`${item}-${i}`} className="flex items-center">
+          {i > 0 && <span className="mx-[6px] opacity-50">•</span>}
+          <span>{item}</span>
+        </span>
+      ))}
     </div>
   );
 }
 
 // ─── Logo box ────────────────────────────────────────────────────────────────
-function LogoBox({ data, top = 36 }: { data: CardData; top?: number }) {
+// `width` is only used for the "wide" logo shape — when provided, the logo
+// container is forced to that exact width (used to match the QR box width,
+// including its outline) and centred the same way the QR box is centred.
+function LogoBox({ data, top = 36, width }: { data: CardData; top?: number; width?: number }) {
   const accent = data.accentColor || "#C9A96E";
 
   if (data.logoUpload) {
     if (data.logoShape === "wide") {
+      const boxWidth = width ?? EXPORT_WIDTH - 56; // fallback: old left/right-28px behaviour
       return (
         <div
-          className="absolute left-[28px] right-[28px] flex items-center justify-center overflow-hidden"
-          style={{ top, height: 72 }}
+          className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden"
+          style={{ top, width: boxWidth, height: 72 }}
         >
           <img
             src={data.logoUpload}
@@ -226,6 +239,9 @@ function LogoBox({ data, top = 36 }: { data: CardData; top?: number }) {
 //   footer rule = 636
 //
 // QR box fills the gap between tableBottom and scanTop dynamically.
+//
+// Wide logo width: matched to qrBoxSize (QR image + its outline/padding) so the
+// logo banner and the QR frame share the same left/right edges on the card.
 // ═══════════════════════════════════════════════════════════════════════════════
 function SpecialtyCafeCard({ data }: { data: CardData }) {
   const accent      = data.accentColor      || "#C9A96E";
@@ -233,6 +249,7 @@ function SpecialtyCafeCard({ data }: { data: CardData }) {
   const textTable   = data.textColorTable   || "#3D2B1F";
   const fontClass   = getFontClass(data.fontFamily);
   const scanLabel   = data.scanLabel?.trim() || "Scan to Order";
+  const qrOutline   = data.qrOutlineColor?.trim() || "#FFFFFF";
 
   const isWide     = data.logoUpload && data.logoShape === "wide";
   const logoTop    = 36;
@@ -271,7 +288,7 @@ function SpecialtyCafeCard({ data }: { data: CardData }) {
         <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${accent}44, transparent)` }} />
       </div>
 
-      <LogoBox data={data} top={logoTop} />
+      <LogoBox data={data} top={logoTop} width={isWide ? qrBoxSize : undefined} />
 
       {/* Merchant name + tagline */}
       <div className="absolute left-[28px] right-[28px] text-center" style={{ top: nameTop }}>
@@ -305,13 +322,14 @@ function SpecialtyCafeCard({ data }: { data: CardData }) {
       {/* QR code — hidden when showQr is false */}
       {data.showQr !== false && (
         <div
-          className="absolute left-1/2 -translate-x-1/2 bg-white rounded-[20px] shadow-[0_8px_28px_rgba(61,43,31,0.12)]"
+          className="absolute left-1/2 -translate-x-1/2 rounded-[20px] shadow-[0_8px_28px_rgba(61,43,31,0.12)]"
           style={{
-            top:      qrTop,
-            width:    qrBoxSize,
-            height:   qrBoxSize,
-            padding:  11,
-            overflow: "hidden",   // clips anything that tries to escape
+            top:        qrTop,
+            width:      qrBoxSize,
+            height:     qrBoxSize,
+            padding:    11,
+            overflow:   "hidden",   // clips anything that tries to escape
+            background: qrOutline,
           }}
         >
           {/* 

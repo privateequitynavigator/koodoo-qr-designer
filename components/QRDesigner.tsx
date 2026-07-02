@@ -48,6 +48,9 @@ const accentPresets = [
   "#F97316", "#14B8A6",
 ];
 
+// QR outline / frame colour presets — defaults to white, matches common card backgrounds
+const qrOutlinePresets = ["#FFFFFF", "#F5EDE3", "#FAF8F5", "#1C1C1E", "#3D2B1F", "#C9A96E"];
+
 // ─── Font options ────────────────────────────────────────────────────────────
 const fontOptions: { id: FontFamily; label: string; sample: string }[] = [
   { id: "playfair",  label: "Playfair",     sample: "Aa" },
@@ -86,6 +89,8 @@ const DEFAULT_CARD: CardData = {
   logoShape:        "circle",
   scanLabel:        "SCAN TO ORDER",
   showQr:           true,
+  qrOutlineColor:   "#FFFFFF",
+  actionRow:        "View Menu • Place Order • Pay Online • Earn Rewards",
 };
 
 // ─── Small reusable components ───────────────────────────────────────────────
@@ -399,7 +404,21 @@ export default function QRDesigner() {
                 placeholder="Scan to Order"
               />
               <p className="text-[11px] text-slate-600 mt-1.5">
-                Change to anything — e.g. "Order Here", "Scan & Enjoy"
+                Change to anything — e.g. "Order Here", "Scan &amp; Enjoy"
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm text-slate-300 mb-1.5">Action Row</label>
+              <input
+                type="text"
+                value={cardData.actionRow ?? "View Menu • Place Order • Pay Online • Earn Rewards"}
+                onChange={(e) => update("actionRow", e.target.value)}
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-emerald-500 text-sm"
+                placeholder="View Menu • Place Order • Pay Online • Earn Rewards"
+              />
+              <p className="text-[11px] text-slate-600 mt-1.5">
+                Separate items with • — add, remove, or reorder as needed for each merchant
               </p>
             </div>
           </div>
@@ -471,7 +490,7 @@ export default function QRDesigner() {
               </div>
               {cardData.logoShape === "wide" && (
                 <p className="text-[11px] text-slate-500 mt-1.5">
-                  Wide mode fits horizontal logos like AkarX — full-width, height-constrained.
+                  Wide mode fits horizontal logos like AkarX — width is matched to the QR code box below.
                 </p>
               )}
             </div>
@@ -528,7 +547,7 @@ export default function QRDesigner() {
               </button>
             </div>
 
-            {/* Upload — only shown when QR is on */}
+            {/* Upload + outline colour — only shown when QR is on */}
             {cardData.showQr && (
               <>
                 {cardData.qrImage && cardData.qrImage !== "/sample-qr.png" ? (
@@ -564,6 +583,37 @@ export default function QRDesigner() {
                 <p className="text-[11px] text-slate-600 leading-relaxed">
                   Export from QR Tiger, Canva, or any QR generator.
                 </p>
+
+                {/* Outline colour */}
+                <div>
+                  <label className="block text-xs text-slate-400 mb-2">QR Outline Colour</label>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {qrOutlinePresets.map((c) => (
+                      <ColorSwatch
+                        key={c}
+                        color={c}
+                        active={cardData.qrOutlineColor === c}
+                        onClick={() => update("qrOutlineColor", c)}
+                      />
+                    ))}
+                    <label
+                      className="relative h-7 w-7 rounded-lg border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition flex-shrink-0"
+                      title="Custom outline colour"
+                    >
+                      <span className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-400">+</span>
+                      <input
+                        type="color"
+                        value={cardData.qrOutlineColor}
+                        onChange={(e) => update("qrOutlineColor", e.target.value)}
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                      />
+                    </label>
+                    <span className="text-[10px] font-mono text-slate-500">{cardData.qrOutlineColor}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 mt-1.5">
+                    The frame around the QR code — white by default.
+                  </p>
+                </div>
               </>
             )}
           </div>
